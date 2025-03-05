@@ -7,9 +7,6 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <h1>Gaurav's Weather App</h1>
-      </header>
       <Routes>
         <Route path="/" element={<WeatherHome />} />
         <Route path="/weather/:city" element={<WeatherDetails />} />
