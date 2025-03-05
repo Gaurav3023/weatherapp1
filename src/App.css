@@ -1,0 +1,617 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  background: linear-gradient(to bottom, #1e3c72, #2a5298); /* Deep blue gradient like iOS */
+  color: white;
+  min-height: 100vh;
+}
+
+.App {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  padding: 20px 0;
+  margin-bottom: 20px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 2.5em;
+  font-weight: 300; /* iOS uses lighter font weights */
+}
+
+h2 {
+  font-size: 2em;
+  margin: 20px 0;
+  font-weight: 300;
+}
+
+h3 {
+  font-size: 1.5em;
+  margin: 15px 0;
+  font-weight: 300;
+}
+
+h4 {
+  font-weight: 400;
+  margin: 5px 0;
+}
+
+/* Search bar styling */
+.search-container {
+  position: relative;
+  margin: 20px auto;
+  width: 80%;
+  max-width: 400px;
+}
+
+input[type="text"] {
+  padding: 12px 15px;
+  width: 100%;
+  border: none;
+  border-radius: 20px; /* Rounded corners like iOS */
+  background-color: rgba(255, 255, 255, 0.2); /* Translucent background */
+  color: white;
+  font-size: 1em;
+  backdrop-filter: blur(10px); /* iOS-like blur effect */
+  -webkit-backdrop-filter: blur(10px);
+}
+
+input[type="text"]::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+input[type="text"]:focus {
+  outline: none;
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 10px;
+  margin-top: 5px;
+  z-index: 1000;
+  overflow: hidden;
+  list-style-type: none;
+  padding: 0;
+}
+
+.suggestions li {
+  padding: 12px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+.suggestions li:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Country flag styling */
+.country-flag {
+  font-size: 1.5em;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.suggestion-text {
+  flex: 1;
+}
+
+/* Weather cards styling */
+.weather-cards-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px; /* Increased gap for better separation */
+  margin-top: 20px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.weather-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.2s, background-color 0.2s;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* Ensure all cards have the same height */
+  box-sizing: border-box; /* Include padding in height calculation */
+}
+
+.weather-card:hover {
+  transform: translateY(-5px);
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.weather-card h4 {
+  font-size: 1.3em;
+  margin-bottom: 10px;
+}
+
+.weather-card p {
+  font-size: 2em;
+  margin: 5px 0;
+  font-weight: 300;
+  line-height: 1.2;
+}
+
+/* Forecast styling - improved slider */
+.forecast-container {
+  display: flex;
+  overflow-x: auto;
+  padding: 10px 0;
+  margin: 20px 0;
+  scrollbar-width: none; /* Hide scrollbar for Firefox */
+  -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+  scroll-behavior: smooth; /* Smooth scrolling animation */
+  cursor: grab; /* Show grab cursor to indicate it's scrollable */
+}
+
+.forecast-container:active {
+  cursor: grabbing; /* Change cursor when actively scrolling */
+}
+
+.forecast-container::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+/* Add scroll buttons for desktop */
+.forecast-scroll-wrapper {
+  position: relative;
+  margin: 20px 0;
+}
+
+.forecast-scroll-button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5em;
+  cursor: pointer;
+  z-index: 10;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  transition: background-color 0.2s;
+}
+
+.forecast-scroll-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.forecast-scroll-button.left {
+  left: -15px;
+}
+
+.forecast-scroll-button.right {
+  right: -15px;
+}
+
+@media (max-width: 768px) {
+  .forecast-scroll-button {
+    display: none; /* Hide buttons on mobile as touch scrolling works well */
+  }
+}
+
+.forecast-item {
+  flex: 0 0 auto;
+  width: 100px;
+  text-align: center;
+  padding: 15px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  margin-right: 10px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.forecast-item h4 {
+  font-size: 1em;
+  margin-bottom: 10px;
+}
+
+.forecast-item p {
+  font-size: 1.5em;
+  margin: 5px 0;
+}
+
+/* Map container */
+.map-container {
+  border-radius: 15px;
+  overflow: hidden;
+  margin: 20px 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.city-link {
+  text-decoration: none;
+  color: white;
+  display: block;
+  height: 100%;
+}
+
+.loading-indicator {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 5px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.weather-icon {
+  margin: 10px 0;
+  height: 80px; /* Fixed height for icon container */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.weather-icon img {
+  width: 80px;
+  height: 80px;
+  object-fit: contain; /* Ensure icon fits properly */
+}
+
+.current-weather-icon {
+  margin: 10px auto;
+}
+
+.current-weather-icon img {
+  width: 120px;
+  height: 120px;
+}
+
+.forecast-icon img {
+  width: 50px;
+  height: 50px;
+}
+
+.weather-description {
+  margin-top: 5px;
+  font-size: 1.1em;
+  min-height: 1.5em; /* Minimum height for description */
+}
+
+.city-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.city-time {
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .weather-cards-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 columns on medium screens */
+  }
+}
+
+@media (max-width: 480px) {
+  .weather-cards-container {
+    grid-template-columns: 1fr; /* 1 column on small screens */
+  }
+}
+
+.timezone-info {
+  font-size: 0.9em;
+  opacity: 0.8;
+  margin-bottom: 10px;
+}
+
+.now-forecast {
+  background-color: rgba(255, 255, 255, 0.15); /* Slightly more opaque than other items */
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Weather details grid */
+.weather-details-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin: 20px 0;
+}
+
+.detail-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 15px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.detail-card h4 {
+  margin-top: 0;
+  margin-bottom: 10px;
+  font-weight: 400;
+  font-size: 1em;
+  opacity: 0.8;
+}
+
+.detail-value {
+  font-size: 1.5em;
+  font-weight: 300;
+  margin: 10px 0;
+}
+
+.detail-icon {
+  margin-top: 5px;
+  opacity: 0.7;
+  font-size: 1.2em;
+}
+
+/* Temperature graph */
+.temperature-graph {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  display: flex;
+  height: 200px;
+}
+
+.graph-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  padding-bottom: 30px; /* Space for labels */
+}
+
+.graph-bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+}
+
+.graph-bar {
+  width: 4px;
+  background-color: #4a90e2;
+  border-radius: 4px;
+  position: relative;
+  transition: height 0.3s ease;
+}
+
+.graph-value {
+  position: absolute;
+  top: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8em;
+  white-space: nowrap;
+}
+
+.graph-label {
+  position: absolute;
+  bottom: -25px;
+  font-size: 0.8em;
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.graph-y-axis {
+  width: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 0.8em;
+  opacity: 0.8;
+}
+
+/* Responsive adjustments for details grid */
+@media (max-width: 768px) {
+  .weather-details-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .weather-details-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Layer control styling */
+.leaflet-control-layers {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 10px !important;
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  border: none !important;
+  color: white !important;
+  padding: 8px !important;
+}
+
+.leaflet-control-layers-toggle {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  border-radius: 8px !important;
+}
+
+.leaflet-control-layers-expanded {
+  padding: 10px !important;
+}
+
+.leaflet-control-layers label {
+  color: white !important;
+  margin: 5px 0 !important;
+}
+
+.leaflet-control-layers input {
+  margin-right: 8px !important;
+}
+
+.search-error {
+  background-color: rgba(255, 99, 71, 0.3);
+  color: white;
+  padding: 10px;
+  border-radius: 10px;
+  margin-top: 5px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* Revert the weather card layout adjustments */
+.weather-card .weather-icon {
+  margin: 10px 0; /* Restore original margin */
+}
+
+.forecast-time {
+  font-size: 0.8em;
+  opacity: 0.7;
+  margin-bottom: 5px;
+}
+
+/* iOS-style weather card */
+.ios-style-card {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 25px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  margin-bottom: 30px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  transition: transform 0.3s ease;
+}
+
+.ios-style-card:hover {
+  transform: translateY(-5px);
+}
+
+.ios-style-card h2 {
+  font-size: 2.8em;
+  font-weight: 400;
+  margin-bottom: 5px;
+  letter-spacing: -0.5px;
+}
+
+.ios-time {
+  font-size: 1.2em;
+  opacity: 0.8;
+  margin: 10px 0;
+  font-weight: 300;
+}
+
+.ios-temp {
+  font-size: 5em !important;
+  font-weight: 200 !important;
+  margin: 10px 0 !important;
+  line-height: 1 !important;
+}
+
+.ios-description {
+  font-size: 1.5em !important;
+  margin: 10px 0;
+  font-weight: 300;
+  text-transform: capitalize;
+}
+
+.ios-high-low {
+  font-size: 1.2em;
+  margin: 15px 0 5px;
+  font-weight: 300;
+  opacity: 0.9;
+}
+
+.current-weather-icon {
+  margin: 10px auto;
+  height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.current-weather-icon img {
+  width: 150px;
+  height: 150px;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+/* Estimated forecast styling */
+.estimated-tag {
+  font-size: 0.8em;
+  vertical-align: super;
+  margin-left: 2px;
+  opacity: 0.8;
+}
+
+.forecast-note {
+  font-size: 0.8em;
+  opacity: 0.7;
+  text-align: right;
+  margin-top: 5px;
+  font-style: italic;
+}
