@@ -160,7 +160,7 @@ function WeatherHome() {
 
   return (
     <div>
-      <h2>Global Weather Forecast</h2>
+      <h2>Gaurav's Global Weather Forecast</h2>
       
       <div className="search-container">
         <form onSubmit={handleSearchSubmit}>
